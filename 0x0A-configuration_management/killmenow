@@ -1,7 +1,8 @@
-#!/bin/bash
+#!/usr/bin/pup
+# Install an especific version of flask (2.1.0)
 
-# Run an infinite loop with sleep
-while true; do
-    sleep 2
-done
+package {'flask':
+  ensure   => '2.1.0',
+  provider => 'pip3'
+}
 
