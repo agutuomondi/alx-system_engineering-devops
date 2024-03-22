@@ -1,0 +1,7 @@
+#!/bin/bash
+
+# Run an infinite loop with sleep
+while true; do
+    sleep 2
+done
+
