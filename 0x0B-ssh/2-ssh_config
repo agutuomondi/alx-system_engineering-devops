@@ -1,0 +1,6 @@
+# SSH client configuration
+
+54.209.68.101
+    ~/.ssh/id_rsa.pud
+    .ssh/authorized_keys
+    agutu
