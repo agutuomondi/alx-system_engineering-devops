@@ -1,4 +1,9 @@
 #!/usr/bin/env bash
 # Generating SSH key-pairs according to Task requirements
 
-ssh-keygen -t rsa -b 4096 -P betty -f school
+read -sp "Enter passphrase for the RSA key: " passphrase
+echo
+
+ssh-keygen -t rsa -b 4096 -f ~/.ssh/school -N "$passphrase"
+
+echo "RSA key pair created successfully."
