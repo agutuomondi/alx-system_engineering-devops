@@ -13,20 +13,19 @@ import requests
 import sys
 
 if __name__ == '__main__':
-    user = sys.argv[1]
-    url_user = 'https://jsonplaceholder.typicode.com/users/' + user
+    user_id = sys.argv[1]
+    url_user = f'https://jsonplaceholder.typicode.com/users/{user_id}'
     res = requests.get(url_user)
-    """ANYTHING"""
     user_name = res.json().get('username')
-    task = url_user + '/todos'
-    res = requests.get(task)
+    task_url = f'{url_user}/todos'
+    res = requests.get(task_url)
     tasks = res.json()
 
-    with open('{}.csv'.format(user), 'w') as csvfile:
+    with open(f'{user_id}.csv', 'w', newline='') as csvfile:
+        csv_writer = csv.writer(csvfile)
+        csv_writer.writerow(["USER_ID", "USERNAME", "TASK_COMPLETED_STATUS", "TASK_TITLE"])
         for task in tasks:
             completed = task.get('completed')
-            """Complete"""
             title_task = task.get('title')
-            """Done"""
-            csvfile.write('"{}","{}","{}","{}"\n'.format(
-                user, user_name, completed, title_task))
+            csv_writer.writerow([user_id, user_name, completed, title_task])
+
