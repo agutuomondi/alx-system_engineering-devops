@@ -1,29 +1,42 @@
 #!/usr/bin/python3
-""" Reddit API"""
+""" Module for a function that queries the Reddit API recursively."""
+
 
 import requests
 
-def count_words(subreddit, word_list, after=None, count=None):
-    """Count occurrences of words in subreddit titles"""
+
+def count_words(subreddit, word_list, after='', word_dict=None):
+    """
+    count all words
+    """
+    if word_dict is None:
+        word_dict = {word.lower(): 0 for word in word_list}
+
     if after is None:
-        count = {}
-    url = f"https://www.reddit.com/r/{subreddit}/hot.json"
-    params = {'after': after} if after else {}
-    headers = {'user-agent': 'bhalut'}
+        word_dict_sorted = sorted(word_dict.items(), key=lambda x: (-x[1], x[0]))
+        for word, count in word_dict_sorted:
+            if count:
+                print('{}: {}'.format(word, count))
+        return None
+
+    url = 'https://www.reddit.com/r/{}/hot/.json'.format(subreddit)
+    header = {'user-agent': 'redquery'}
+    parameters = {'limit': 100, 'after': after}
+    response = requests.get(url, headers=header, params=parameters,
+                            allow_redirects=False)
+
+    if response.status_code != 200:
+        return None
+
     try:
-        response = requests.get(url, params=params, headers=headers, allow_redirects=False)
-        response.raise_for_status()  # Raises an error for bad response
-        data = response.json()['data']
-        for child in data['children']:
-            title_words = child['data']['title'].lower().split()
-            for word in word_list:
-                if word.lower() in title_words:
-                    count[word] = count.get(word, 0) + 1
-        after = data.get('after')
-        if after is None:
-            for word, count_ in sorted(count.items(), key=lambda x: (-x[1], x[0])):
-                print(f"{word}: {count_}")
-        else:
-            count_words(subreddit, word_list, after, count)
-    except requests.RequestException as e:
-        print(f"Error fetching data: {e}")
+        hot = response.json()['data']['children']
+        aft = response.json()['data']['after']
+        for post in hot:
+            title = post['data']['title']
+            lower = [word.lower() for word in title.split()]
+            for word in word_dict:
+                word_dict[word] += lower.count(word)
+
+    except Exception:
+        return None
+
