@@ -1,3 +1,4 @@
+#!/usr/bin/env bash
 https://intranet.alxswe.com/rltoken/meOqLRoAcbQENYWfzui7OQ
 https://intranet.alxswe.com/rltoken/kpG6RwmwRJHzRmGUM_ERcA
 https://intranet.alxswe.com/rltoken/2LF1j7xKJGYaUtD1HKgUeQ
